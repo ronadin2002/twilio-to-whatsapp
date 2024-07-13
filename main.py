@@ -36,7 +36,7 @@ html_content = """
             margin: 0;
             padding: 0;
         }
-        .chat-container {
+        .container {
             width: 100%;
             max-width: 600px;
             margin: 20px auto;
@@ -44,6 +44,21 @@ html_content = """
             background-color: #fff;
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
             border-radius: 10px;
+        }
+        .chat-container {
+            display: none;
+        }
+        .chat-list {
+            list-style: none;
+            padding: 0;
+        }
+        .chat-list li {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            cursor: pointer;
+        }
+        .chat-list li:hover {
+            background-color: #f1f1f1;
         }
         .message {
             padding: 10px;
@@ -68,6 +83,7 @@ html_content = """
             font-weight: bold;
             font-size: 1.2em;
             margin-bottom: 10px;
+            cursor: pointer;
         }
         .counter {
             text-align: center;
@@ -75,22 +91,46 @@ html_content = """
             margin: 20px 0;
         }
     </style>
+    <script>
+        function showChat(contact) {
+            document.querySelectorAll('.chat-container').forEach(chat => {
+                chat.style.display = 'none';
+            });
+            document.getElementById(contact).style.display = 'block';
+            document.getElementById('chat-list').style.display = 'none';
+        }
+
+        function showChatList() {
+            document.querySelectorAll('.chat-container').forEach(chat => {
+                chat.style.display = 'none';
+            });
+            document.getElementById('chat-list').style.display = 'block';
+        }
+    </script>
 </head>
 <body>
+    <div class="container">
+        <div class="counter">
+            Number of different contacts: """ + str(len(chats)) + """
+        </div>
+        <ul id="chat-list" class="chat-list">
 """
 
-# Add the counter
-html_content += f"""
-    <div class="counter">
-        Number of different contacts: {len(chats)}
-    </div>
+# Generate HTML for the chat list
+for contact in chats.keys():
+    html_content += f"""
+            <li onclick="showChat('{contact}')">Chat with {contact}</li>
+    """
+
+html_content += """
+        </ul>
 """
 
 # Generate HTML for each chat
 for contact, messages in chats.items():
     html_content += f"""
-    <div class="chat-container">
-        <div class="contact-header">Chat with {contact}</div>
+    <div id="{contact}" class="chat-container">
+        <div class="contact-header" onclick="showChatList()">Chat with {contact}</div>
     """
     for message in messages:
         html_content += f"""
@@ -105,14 +145,14 @@ for contact, messages in chats.items():
 
 # End the HTML content
 html_content += """
+    </div>
 </body>
 </html>
 """
 
 # Save the HTML content to a file
-output_path = 'chat_display_with_counter.html'
+output_path = 'chat_display_with_navigation.html'
 with open(output_path, "w", encoding="utf-8") as file:
     file.write(html_content)
 
 output_path
-
