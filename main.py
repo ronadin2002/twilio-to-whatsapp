@@ -20,6 +20,8 @@ for index, row in sms_log.iterrows():
     })
 
 # Start the HTML content
+
+# Start the HTML content with a counter
 html_content = """
 <!DOCTYPE html>
 <html lang="en">
@@ -67,9 +69,21 @@ html_content = """
             font-size: 1.2em;
             margin-bottom: 10px;
         }
+        .counter {
+            text-align: center;
+            font-size: 1.5em;
+            margin: 20px 0;
+        }
     </style>
 </head>
 <body>
+"""
+
+# Add the counter
+html_content += f"""
+    <div class="counter">
+        Number of different contacts: {len(chats)}
+    </div>
 """
 
 # Generate HTML for each chat
@@ -96,8 +110,9 @@ html_content += """
 """
 
 # Save the HTML content to a file
-output_path = 'chat_display.html'
+output_path = 'chat_display_with_counter.html'
 with open(output_path, "w", encoding="utf-8") as file:
     file.write(html_content)
 
 output_path
+
