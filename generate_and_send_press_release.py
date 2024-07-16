@@ -94,5 +94,5 @@ def send_email(subject, body, recipient):
 
 if __name__ == "__main__":
     press_release, commit_message, new_code = generate_press_release()
-    email_body = f"{press_release}\n\nCommit Message:\n{commit_message}\n\nNew Code Changes:\n{get_changed_code}"
+    email_body = f"{press_release}\n\nCommit Message:\n{commit_message}\n\nNew Code Changes:\n{get_changed_code()}"
     send_email("New Press Release", email_body, recipient_email)
