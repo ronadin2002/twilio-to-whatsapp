@@ -90,6 +90,30 @@ html_content = """
             font-size: 1.5em;
             margin: 20px 0;
         }
+        /* Dark mode styles */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .container {
+            background-color: #1e1e1e;
+            color: #e0e0e0;
+        }
+        body.dark-mode .chat-list li {
+            border-bottom: 1px solid #444;
+        }
+        body.dark-mode .chat-list li:hover {
+            background-color: #333;
+        }
+        body.dark-mode .message.inbound {
+            background-color: #333;
+        }
+        body.dark-mode .message.outbound {
+            background-color: #222;
+        }
+        body.dark-mode .timestamp {
+            color: #bbb;
+        }
     </style>
     <script>
         function showChat(contact) {
@@ -106,6 +130,9 @@ html_content = """
             });
             document.getElementById('chat-list').style.display = 'block';
         }
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+        }
     </script>
 </head>
 <body>
@@ -113,6 +140,7 @@ html_content = """
         <div class="counter">
             Number of different contacts: """ + str(len(chats)) + """
         </div>
+        <button class="toggle-btn" onclick="toggleDarkMode()">Toggle Dark Mode</button>
         <ul id="chat-list" class="chat-list">
 """
 #ron is testingsa
