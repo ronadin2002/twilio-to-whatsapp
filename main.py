@@ -116,6 +116,8 @@ html_content = """
         <ul id="chat-list" class="chat-list">
 """
 #hello you there
+#hello you there
+
 # Generate HTML for the chat list
 for contact in chats.keys():
     html_content += f"""
