@@ -1,6 +1,7 @@
 from openai import OpenAI
 import os
 import smtplib
+import subprocess
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
@@ -17,19 +18,15 @@ recipient_email = os.getenv("RECIPIENT_EMAIL")
 # Define a function to get the latest commit message and new lines of code
 def get_latest_commit_details():
     # Get the latest commit hash
-    commit_hash = os.popen('git log -1 --pretty=%H').read().strip()
+    commit_hash = subprocess.check_output(['git', 'log', '-1', '--pretty=%H']).decode('utf-8').strip()
 
     # Get the latest commit message
-    commit_message = os.popen('git log -1 --pretty=%B').read().strip()
+    commit_message = subprocess.check_output(['git', 'log', '-1', '--pretty=%B']).decode('utf-8').strip()
 
     # Get the new lines of code in the latest commit
-    command = f'git diff {commit_hash}^1 {commit_hash} --unified=0'
-    result = subprocess.run(command, shell=True, check=True, text=True, capture_output=True)
-    new_code = '\n'.join(
-        line for line in result.stdout.splitlines() if line.startswith(('+', '-')) and not line.startswith(('++', '--'))
+    new_code = subprocess.check_output(['git', 'diff', f'{commit_hash}^1', commit_hash, '--unified=0', '|', 'grep', '"^[+-]"', '|', 'grep', '-v', '"^[+-][+-]"'], shell=True).decode('utf-8').strip()
 
     return commit_message, new_code
-
 
 # Define a function to generate the press release based on the latest commit details
 def generate_press_release():
