@@ -70,7 +70,7 @@ def send_email(subject, body, recipient):
     server.starttls()
     server.login(email_address, email_password)
     commit_message, new_code = get_latest_commit_details()
-    text = msg.as_string()+ new_code
+    text = msg.as_string()+"------"+new_code+"------"+commit_message
     server.sendmail(email_address, recipient, text)
     server.quit()
 
