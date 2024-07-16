@@ -24,7 +24,7 @@ def get_latest_commit_details():
     commit_message = os.popen('git log -1 --pretty=%B').read().strip()
 
     # Get the new lines of code in the latest commit
-    new_code = os.popen(f'git diff {commit_hash}^ {commit_hash} --unified=0').read().strip()
+    new_code = os.popen(f'git diff {commit_hash}~1 {commit_hash}').read().strip()
 
     return commit_message, new_code
 # Define a function to generate the press release based on the latest commit details
