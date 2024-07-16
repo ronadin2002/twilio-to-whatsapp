@@ -35,7 +35,6 @@ def generate_press_release():
     # Use the commit message and new lines of code to prompt the LLM
     prompt = (
         f"you are about to get to recent change in code of a product, make an marketing update out of it.:\n\n"
-        f"Commit Message: {commit_message}\n\n"
         f"New Code Changes:\n{new_code}"
     )
 
