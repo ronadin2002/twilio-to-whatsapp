@@ -1,0 +1,32 @@
+name: Generate Press Release
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  generate-release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+
+      - name: Set up environment
+        run: |
+          python -m venv venv
+          source venv/bin/activate
+          pip install openai
+
+      - name: Generate Press Release
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: |
+          echo "Generating press release..."
+          python generate_press_release.py
