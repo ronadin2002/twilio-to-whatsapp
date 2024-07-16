@@ -1,6 +1,6 @@
 from openai import OpenAI
 import os
-import git
+import subprocess
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
@@ -28,19 +28,22 @@ def get_latest_commit_details():
 
     return commit_message, new_code
 
-def get_changed_lines():
-    repo = git.Repo('.')
-    # Get the list of changed files
-    changed_files = repo.git.diff('--name-only', 'HEAD~1').splitlines()
-    changes = ""
 
-    for file in changed_files:
-        # Get the diff for each file
-        diff = repo.git.diff('HEAD~1', file)
-        if diff:  # Check if there is any diff content
-            changes += f"\nChanges in {file}:\n{diff}\n{'-'*80}\n"
+def get_changed_code():
+    try:
+        # Get the commit hash of the previous commit
+        prev_commit = subprocess.check_output(['git', 'rev-parse', 'HEAD~1']).strip().decode('utf-8')
 
-    return changes
+        # Get the commit hash of the current commit
+        current_commit = subprocess.check_output(['git', 'rev-parse', 'HEAD']).strip().decode('utf-8')
+
+        # Get the diff between the current commit and the previous commit
+        diff = subprocess.check_output(['git', 'diff', prev_commit, current_commit]).decode('utf-8')
+
+        return diff
+    except subprocess.CalledProcessError as e:
+        print(f"Error: {e.output}")
+        return ""
 
 # Define a function to generate the press release based on the latest commit details
 def generate_press_release():
