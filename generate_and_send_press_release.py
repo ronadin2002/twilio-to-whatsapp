@@ -18,31 +18,15 @@ recipient_email = os.getenv("RECIPIENT_EMAIL")
 # Define a function to get the latest commit message and new lines of code
 def get_latest_commit_details():
     # Get the latest commit hash
-    commit_hash = subprocess.check_output(['git', 'log', '-1', '--pretty=%H']).decode('utf-8').strip()
+    commit_hash = os.popen('git log -1 --pretty=%H').read().strip()
 
     # Get the latest commit message
-    commit_message = subprocess.check_output(['git', 'log', '-1', '--pretty=%B']).decode('utf-8').strip()
+    commit_message = os.popen('git log -1 --pretty=%B').read().strip()
 
-    try:
-        # Attempt to get the new lines of code in the latest commit
-        diff_output = subprocess.check_output(['git', 'diff', f'{commit_hash}^1', commit_hash, '--unified=0']).decode('utf-8')
-    except subprocess.CalledProcessError as e:
-        if e.returncode == 128:
-            # If it's the initial commit, diff won't work. Get the initial commit changes instead.
-            diff_output = subprocess.check_output(['git', 'show', '--unified=0', commit_hash]).decode('utf-8')
-        else:
-            raise
-
-    new_code_lines = []
-    for line in diff_output.split('\n'):
-        if line.startswith('+') and not line.startswith('+++'):
-            new_code_lines.append(line)
-        elif line.startswith('-') and not line.startswith('---'):
-            new_code_lines.append(line)
-    new_code = '\n'.join(new_code_lines)
+    # Get the new lines of code in the latest commit
+    new_code = os.popen(f'git diff {commit_hash}^ {commit_hash} --unified=0').read().strip()
 
     return commit_message, new_code
-
 # Define a function to generate the press release based on the latest commit details
 def generate_press_release():
     commit_message, new_code = get_latest_commit_details()
