@@ -23,6 +23,8 @@ jobs:
           python -m venv venv
           source venv/bin/activate
           pip install openai
+          pip install smtplib # This line is unnecessary because smtplib is part of the standard library
+          pip install email # This line is unnecessary because email is part of the standard library
 
       - name: Generate and Send Press Release
         env:
@@ -31,5 +33,5 @@ jobs:
           EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
           RECIPIENT_EMAIL: ${{ secrets.RECIPIENT_EMAIL }}
         run: |
-          echo "Generating and sending press release..."
-          python generate_press_release.py
+          source venv/bin/activate
+          python generate_and_send_press_release.py
