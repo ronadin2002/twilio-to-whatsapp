@@ -23,8 +23,16 @@ def get_latest_commit_details():
     # Get the latest commit message
     commit_message = subprocess.check_output(['git', 'log', '-1', '--pretty=%B']).decode('utf-8').strip()
 
-    # Get the new lines of code in the latest commit
-    diff_output = subprocess.check_output(['git', 'diff', f'{commit_hash}^1', commit_hash, '--unified=0']).decode('utf-8')
+    try:
+        # Attempt to get the new lines of code in the latest commit
+        diff_output = subprocess.check_output(['git', 'diff', f'{commit_hash}^1', commit_hash, '--unified=0']).decode('utf-8')
+    except subprocess.CalledProcessError as e:
+        if e.returncode == 128:
+            # If it's the initial commit, diff won't work. Get the initial commit changes instead.
+            diff_output = subprocess.check_output(['git', 'show', '--unified=0', commit_hash]).decode('utf-8')
+        else:
+            raise
+
     new_code_lines = []
     for line in diff_output.split('\n'):
         if line.startswith('+') and not line.startswith('+++'):
