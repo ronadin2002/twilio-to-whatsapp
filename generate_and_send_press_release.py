@@ -30,12 +30,15 @@ def get_latest_commit_details():
 
 def get_changed_lines():
     repo = git.Repo('.')
+    # Get the list of changed files
     changed_files = repo.git.diff('--name-only', 'HEAD~1').splitlines()
     changes = ""
 
     for file in changed_files:
+        # Get the diff for each file
         diff = repo.git.diff('HEAD~1', file)
-        changes += f"Changes in {file}:\n{diff}\n"
+        if diff:  # Check if there is any diff content
+            changes += f"\nChanges in {file}:\n{diff}\n{'-'*80}\n"
 
     return changes
 
