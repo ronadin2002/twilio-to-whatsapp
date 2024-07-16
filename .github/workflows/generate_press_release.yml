@@ -12,6 +12,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
 
       - name: Install Python
         uses: actions/setup-python@v2
@@ -23,8 +25,6 @@ jobs:
           python -m venv venv
           source venv/bin/activate
           pip install openai
-          pip install gitpython
-
 
       - name: Generate and Send Press Release
         env:
