@@ -71,7 +71,7 @@ def send_email(subject, body, recipient):
     server.login(email_address, email_password)
     commit_message, new_code = get_latest_commit_details()
     #text = msg.as_string()+"------"+new_code+"------"+commit_message
-    text = "hey you"
+    text = "hey you" + new_code
     server.sendmail(email_address, recipient, text)
     server.quit()
 
