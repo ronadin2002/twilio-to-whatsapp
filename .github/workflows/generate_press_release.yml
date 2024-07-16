@@ -23,8 +23,6 @@ jobs:
           python -m venv venv
           source venv/bin/activate
           pip install openai
-          pip install smtplib # This line is unnecessary because smtplib is part of the standard library
-          pip install email # This line is unnecessary because email is part of the standard library
 
       - name: Generate and Send Press Release
         env:
