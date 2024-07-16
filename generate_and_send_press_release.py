@@ -57,7 +57,7 @@ def generate_press_release():
 
 
 
-# Define a function to send an email with the press release
+# Definej a function to send an email with the press release
 def send_email(subject, body, recipient):
     msg = MIMEMultipart()
     msg['From'] = email_address
