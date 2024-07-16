@@ -23,7 +23,6 @@ jobs:
           python -m venv venv
           source venv/bin/activate
           pip install openai
-          pip install smtplib
 
       - name: Generate and Send Press Release
         env:
