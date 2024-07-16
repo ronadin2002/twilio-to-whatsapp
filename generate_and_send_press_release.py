@@ -24,7 +24,14 @@ def get_latest_commit_details():
     commit_message = subprocess.check_output(['git', 'log', '-1', '--pretty=%B']).decode('utf-8').strip()
 
     # Get the new lines of code in the latest commit
-    new_code = subprocess.check_output(['git', 'diff', f'{commit_hash}^1', commit_hash, '--unified=0', '|', 'grep', '"^[+-]"', '|', 'grep', '-v', '"^[+-][+-]"'], shell=True).decode('utf-8').strip()
+    diff_output = subprocess.check_output(['git', 'diff', f'{commit_hash}^1', commit_hash, '--unified=0']).decode('utf-8')
+    new_code_lines = []
+    for line in diff_output.split('\n'):
+        if line.startswith('+') and not line.startswith('+++'):
+            new_code_lines.append(line)
+        elif line.startswith('-') and not line.startswith('---'):
+            new_code_lines.append(line)
+    new_code = '\n'.join(new_code_lines)
 
     return commit_message, new_code
 
