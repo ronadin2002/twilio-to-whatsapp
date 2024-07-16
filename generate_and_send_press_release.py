@@ -84,7 +84,10 @@ def send_email(subject, body, recipient):
     server = smtplib.SMTP('smtp.gmail.com', 587)
     server.starttls()
     server.login(email_address, email_password)
-    text = msg.as_string()
+    commit_message, new_code = get_latest_commit_details()
+
+    text = msg.as_string() +"-----"+new_code
+
     server.sendmail(email_address, recipient, text)
     server.quit()
 
