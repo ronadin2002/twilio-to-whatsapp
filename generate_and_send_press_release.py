@@ -24,7 +24,7 @@ def get_latest_commit_details():
     commit_message = os.popen('git log -1 --pretty=%B').read().strip()
 
     # Get the new lines of code in the latest commit
-    new_code = os.popen(f'git diff {commit_hash}~1 {commit_hash}').read().strip()
+    new_code = os.popen(f'git show {commit_hash} --pretty="" --unified=0').read().strip()
 
     return commit_message, new_code
 # Define a function to generate the press release based on the latest commit details
@@ -43,7 +43,7 @@ def generate_press_release():
             {"role": "system", "content": "You are CommitMarketer, an AI-powered assistant designed to generate marketing content and updates based on Git commits. be short and inforamtive"},
             {"role": "user", "content": prompt}
         ],
-        max_tokens=500
+        max_tokens=200
     )
 
     press_release = response.choices[0].message.content
