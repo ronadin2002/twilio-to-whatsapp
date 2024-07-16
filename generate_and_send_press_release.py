@@ -1,11 +1,14 @@
-import openai
+from openai import OpenAI
 import os
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
+
+client = OpenAI()
+
 # Load the OpenAI API key from environment variables
-openai.api_key = os.getenv("OPENAI_API_KEY")
+client.api_key = os.getenv("OPENAI_API_KEY")
 email_address = os.getenv("EMAIL_ADDRESS")
 email_password = os.getenv("EMAIL_PASSWORD")
 recipient_email = os.getenv("RECIPIENT_EMAIL")
@@ -36,7 +39,7 @@ def generate_press_release():
         f"New Code Changes:\n{new_code}"
     )
 
-    response = openai.ChatCompletion.create(
+    response = client.chat.completions.create(
         model="gpt-4",
         messages=[
             {"role": "system", "content": "You are a helpful assistant."},
@@ -45,7 +48,7 @@ def generate_press_release():
         max_tokens=500
     )
 
-    press_release = response.choices[0].message['content'].strip()
+    press_release = response.choices[0].message.content
 
     # Save the press release to a file
     with open('press_release.txt', 'w') as file:
