@@ -23,7 +23,7 @@ def get_latest_commit_details():
     commit_message = os.popen('git log -1 --pretty=%B').read().strip()
 
     # Get the new lines of code in the latest commit
-    new_code = os.popen(f'git show {commit_hash} --pretty="" --unified=0').read().strip()
+    new_code = os.popen(f'git diff {commit_hash}~1 {commit_hash}').read().strip()
 
     return commit_message, new_code
 
