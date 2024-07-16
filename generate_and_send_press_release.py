@@ -23,8 +23,10 @@ def get_latest_commit_details():
     commit_message = os.popen('git log -1 --pretty=%B').read().strip()
 
     # Get the new lines of code in the latest commit
-    new_code = os.popen(f'git diff {commit_hash}^1 {commit_hash} --unified=0 | grep "^[+-]" | grep -v "^[+-][+-]"').read().strip()
-
+    command = f'git diff {commit_hash}^1 {commit_hash} --unified=0'
+    result = subprocess.run(command, shell=True, check=True, text=True, capture_output=True)
+    new_code = '\n'.join(
+        line for line in result.stdout.splitlines() if line.startswith(('+', '-')) and not line.startswith(('++', '--'))
 
     return commit_message, new_code
 
