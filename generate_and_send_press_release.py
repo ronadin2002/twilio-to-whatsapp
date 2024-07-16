@@ -34,7 +34,7 @@ def generate_press_release():
 
     # Use the commit message and new lines of code to prompt the LLM
     prompt = (
-        f"Generate a marketing/press release based on the following code update:\n\n"
+        f"you are about to get to recent change in code of a product, make an marketing update out of it.:\n\n"
         f"Commit Message: {commit_message}\n\n"
         f"New Code Changes:\n{new_code}"
     )
@@ -42,7 +42,7 @@ def generate_press_release():
     response = client.chat.completions.create(
         model="gpt-4",
         messages=[
-            {"role": "system", "content": "You are a helpful assistant."},
+            {"role": "system", "content": "You are CommitMarketer, an AI-powered assistant designed to generate marketing content and updates based on Git commits."},
             {"role": "user", "content": prompt}
         ],
         max_tokens=500
