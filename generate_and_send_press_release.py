@@ -46,7 +46,7 @@ def generate_press_release():
         max_tokens=500
     )
 
-    press_release = response.choices[0].message['content'].strip()
+    press_release = response.choices[0].message.content
 
     # Save the press release to a file
     with open('press_release.txt', 'w') as file:
