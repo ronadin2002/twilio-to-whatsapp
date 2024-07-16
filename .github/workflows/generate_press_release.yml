@@ -32,4 +32,4 @@ jobs:
           RECIPIENT_EMAIL: ${{ secrets.RECIPIENT_EMAIL }}
         run: |
           echo "Generating and sending press release..."
-          python generate_and_send_press_release.py
+          python generate_press_release.py
