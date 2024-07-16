@@ -36,13 +36,16 @@ def generate_press_release():
         f"New Code Changes:\n{new_code}"
     )
 
-    response = openai.Completion.create(
+    response = openai.ChatCompletion.create(
         model="gpt-4",
-        prompt=prompt,
+        messages=[
+            {"role": "system", "content": "You are a helpful assistant."},
+            {"role": "user", "content": prompt}
+        ],
         max_tokens=500
     )
 
-    press_release = response.choices[0].text.strip()
+    press_release = response['choices'][0]['message']['content'].strip()
 
     # Save the press release to a file
     with open('press_release.txt', 'w') as file:
