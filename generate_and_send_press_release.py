@@ -1,8 +1,10 @@
 from openai import OpenAI
 import os
+import git
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
+
 
 client = OpenAI()
 
@@ -26,6 +28,16 @@ def get_latest_commit_details():
 
     return commit_message, new_code
 
+def get_changed_lines():
+    repo = git.Repo('.')
+    changed_files = repo.git.diff('--name-only', 'HEAD~1').splitlines()
+    changes = ""
+
+    for file in changed_files:
+        diff = repo.git.diff('HEAD~1', file)
+        changes += f"Changes in {file}:\n{diff}\n"
+
+    return changes
 
 # Define a function to generate the press release based on the latest commit details
 def generate_press_release():
@@ -76,5 +88,5 @@ def send_email(subject, body, recipient):
 
 if __name__ == "__main__":
     press_release, commit_message, new_code = generate_press_release()
-    email_body = f"{press_release}\n\nCommit Message:\n{commit_message}\n\nNew Code Changes:\n{new_code}"
+    email_body = f"{press_release}\n\nCommit Message:\n{commit_message}\n\nNew Code Changes:\n{get_changed_lines}"
     send_email("New Press Release", email_body, recipient_email)
