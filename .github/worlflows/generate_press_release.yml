@@ -23,10 +23,14 @@ jobs:
           python -m venv venv
           source venv/bin/activate
           pip install openai
+          pip install smtplib
 
-      - name: Generate Press Release
+      - name: Generate and Send Press Release
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          EMAIL_ADDRESS: ${{ secrets.EMAIL_ADDRESS }}
+          EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
+          RECIPIENT_EMAIL: ${{ secrets.RECIPIENT_EMAIL }}
         run: |
-          echo "Generating press release..."
-          python generate_press_release.py
+          echo "Generating and sending press release..."
+          python generate_and_send_press_release.py

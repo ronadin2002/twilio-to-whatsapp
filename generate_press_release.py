@@ -1,8 +1,14 @@
 import openai
 import os
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 
 # Load the OpenAI API key from environment variables
 openai.api_key = os.getenv("OPENAI_API_KEY")
+email_address = os.getenv("EMAIL_ADDRESS")
+email_password = os.getenv("EMAIL_PASSWORD")
+recipient_email = os.getenv("RECIPIENT_EMAIL")
 
 
 # Define a function to get the latest commit message and new lines of code
@@ -42,8 +48,28 @@ def generate_press_release():
     with open('press_release.txt', 'w') as file:
         file.write(press_release)
 
-    print("Press release generated and saved to press_release.txt")
+    return press_release
+
+
+# Define a function to send an email with the press release
+def send_email(subject, body, recipient):
+    msg = MIMEMultipart()
+    msg['From'] = email_address
+    msg['To'] = recipient
+    msg['Subject'] = subject
+
+    msg.attach(MIMEText(body, 'plain'))
+
+    server = smtplib.SMTP('smtp.gmail.com', 587)
+    server.starttls()
+    server.login(email_address, email_password)
+    text = msg.as_string()
+    server.sendmail(email_address, recipient, text)
+    server.quit()
+
+    print("Email sent successfully")
 
 
 if __name__ == "__main__":
-    generate_press_release()
+    press_release = generate_press_release()
+    send_email("New Press Release", press_release, recipient_email)
