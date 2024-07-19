@@ -32,7 +32,7 @@ html_content = """
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #ece5dd;
+            background-color: red;
             margin: 0;
             padding: 0;
         }
